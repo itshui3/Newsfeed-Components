@@ -92,6 +92,13 @@ const data = [
     firstParagraph: "Ea Lorem adipisicing sit excepteur officia duis magna minim in. Culpa adipisicing aliqua irure ut. Dolor adipisicing dolor ad non consectetur mollit fugiat consectetur aliqua. Commodo ad exercitation ullamco sint in do. Exercitation irure culpa Lorem labore esse proident in nisi exercitation. Ut duis cillum culpa et.",
     secondParagraph: "Cupidatat et voluptate ex irure sit voluptate. Non cillum irure voluptate consequat. Irure laborum sit veniam laboris tempor. Anim sint veniam et ea laboris non est et tempor ipsum labore cupidatat.",
     thirdParagraph: "Quis do nulla aliqua dolore eiusmod. Adipisicing incididunt ipsum dolore exercitation reprehenderit laboris est. Enim aliqua in consequat ea officia est sunt ut velit anim quis proident. Adipisicing laborum proident et consectetur. Ipsum eiusmod laborum incididunt veniam incididunt esse sit sunt esse enim. Cillum deserunt anim esse ut est non consectetur. Consequat laborum est officia aliquip aliqua fugiat dolore excepteur excepteur cillum esse esse anim."
+  },
+  {
+    title: "Some Pictures",
+    date: new Date(),
+    firstParagraph: "",
+    secondParagraph: "",
+    thirdParagraph: ""
   }
 ];
 /* Step 1: Create a function that creates a component. You will want your component to look like the template below: 
@@ -114,7 +121,6 @@ function makeArticle(obj) {
 
   let header = document.createElement("h2");
   header.textContent = this.title;
-  console.log(this);
   let date = document.createElement("p");
   date.className = "date";
   date.textContent = this.date;
@@ -132,8 +138,10 @@ function makeArticle(obj) {
     cont.classList.toggle("article-open");
     if(e.target.textContent === "Expand") {
       e.target.textContent = "Shrink";
+      cont.style.overflow = "scroll";
     } else if (e.target.textContent === "Shrink") {
       e.target.textContent = "Expand";
+      cont.style.overflow = "hidden";
     }
   });
   span.textContent = "Expand";
@@ -145,7 +153,6 @@ function makeArticle(obj) {
   cont.appendChild(para2);
   cont.appendChild(para3);
   cont.appendChild(span);
-  console.log(span);
 
   return cont;
 }
@@ -164,3 +171,46 @@ data.map( (elem) => {
   Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
 
 */
+
+const artwork = []; 
+// build a class that constructs objects into artwork containing name & src & alt for images
+
+class ArtMaker {
+  constructor(obj) {
+    this.name = obj.name;
+    this.src = obj.src;
+    this.alt = obj.alt;
+  }
+  makeNode = function() {
+    const newImg = document.createElement("img");
+    newImg.src = this.src;
+    newImg.alt = this.alt;
+
+    return newImg;
+  }
+}
+
+artwork[0] = new ArtMaker({
+  name: "Cat",
+  src: "../assets/cat.png",
+  alt: "Hey, it's a cat pic"
+});
+
+artwork[1] = new ArtMaker({
+  name: "Dog",
+  src: "../assets/dog.png",
+  alt: "Hey, it's a dog pic"
+});
+
+artwork[2] = new ArtMaker({
+  name: "Rabbit",
+  src: "../assets/rabbit.png",
+  alt: "Hey, it's a rabbit pic"
+});
+
+const picArt = document.querySelectorAll("div.article:nth-child(6) p.date~p");
+let picArtArr = Array.from(picArt);
+picArtArr.forEach( (elem) => {
+  let i = picArtArr.indexOf(elem);
+  picArtArr[i].appendChild(artwork[i].makeNode());
+});
