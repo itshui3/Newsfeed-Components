@@ -85,9 +85,22 @@ const data = [
     thirdParagraph: `Hodor hodor - hodor... Hodor hodor hodor hodor. Hodor. Hodor! Hodor hodor, hodor hodor hodor hodor hodor; hodor hodor? Hodor!
           Hodor hodor, HODOR hodor, hodor hodor?! Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor, hodor.
           Hodor. Hodor, hodor, hodor. Hodor hodor... Hodor hodor hodor?! Hodor, hodor... Hodor hodor HODOR hodor, hodor hodor. Hodor.`
+  },
+  {
+    title: "My New Article",
+    date: new Date(),
+    firstParagraph: "Ea Lorem adipisicing sit excepteur officia duis magna minim in. Culpa adipisicing aliqua irure ut. Dolor adipisicing dolor ad non consectetur mollit fugiat consectetur aliqua. Commodo ad exercitation ullamco sint in do. Exercitation irure culpa Lorem labore esse proident in nisi exercitation. Ut duis cillum culpa et.",
+    secondParagraph: "Cupidatat et voluptate ex irure sit voluptate. Non cillum irure voluptate consequat. Irure laborum sit veniam laboris tempor. Anim sint veniam et ea laboris non est et tempor ipsum labore cupidatat.",
+    thirdParagraph: "Quis do nulla aliqua dolore eiusmod. Adipisicing incididunt ipsum dolore exercitation reprehenderit laboris est. Enim aliqua in consequat ea officia est sunt ut velit anim quis proident. Adipisicing laborum proident et consectetur. Ipsum eiusmod laborum incididunt veniam incididunt esse sit sunt esse enim. Cillum deserunt anim esse ut est non consectetur. Consequat laborum est officia aliquip aliqua fugiat dolore excepteur excepteur cillum esse esse anim."
+  },
+  {
+    title: "Some Pictures",
+    date: new Date(),
+    firstParagraph: "",
+    secondParagraph: "",
+    thirdParagraph: ""
   }
 ];
-
 /* Step 1: Create a function that creates a component. You will want your component to look like the template below: 
   
   <div class="article">
@@ -98,17 +111,106 @@ const data = [
 
     <span class='expandButton'></span>
   </div>
-
   Hint: You will need to use createElement more than once here!
+    Your function should take either an object as it's one argument, or 5 separate arguments mapping to each piece of the data object above.
+*/
+function makeArticle(obj) {
 
-  Your function should take either an object as it's one argument, or 5 separate arguments mapping to each piece of the data object above.
+  let cont = document.createElement("div");
+  cont.className = "article";
 
+  let header = document.createElement("h2");
+  header.textContent = this.title;
+  let date = document.createElement("p");
+  date.className = "date";
+  date.textContent = this.date;
+
+  let para1 = document.createElement("p");
+  para1.textContent = this.firstParagraph;
+  let para2 = document.createElement("p");
+  para2.textContent = this.secondParagraph;
+  let para3 = document.createElement("p");
+  para3.textContent = this.thirdParagraph;
+
+  let span = document.createElement("span");
+  span.className = "expandButton";
+  span.addEventListener("click", (e) => {
+    cont.classList.toggle("article-open");
+    if(e.target.textContent === "Expand") {
+      e.target.textContent = "Shrink";
+      cont.style.overflow = "scroll";
+    } else if (e.target.textContent === "Shrink") {
+      e.target.textContent = "Expand";
+      cont.style.overflow = "hidden";
+    }
+  });
+  span.textContent = "Expand";
+
+
+  cont.appendChild(header);
+  cont.appendChild(date);
+  cont.appendChild(para1);
+  cont.appendChild(para2);
+  cont.appendChild(para3);
+  cont.appendChild(span);
+
+  return cont;
+}
+/*
   Step 2: Add an event listener to the expandButton span. This event listener should toggle the class 'article-open' on the 'article' div.
 
   Step 3: return the entire component.
 
   Step 4: Map over the data, creating a component for each oject and add each component to the DOM as children of the 'articles' div.
-
+*/
+const articles = document.querySelector(".articles");
+data.map( (elem) => {
+  articles.appendChild(makeArticle.call(elem));
+})
+/*
   Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
 
 */
+
+const artwork = []; 
+// build a class that constructs objects into artwork containing name & src & alt for images
+
+class ArtMaker {
+  constructor(obj) {
+    this.name = obj.name;
+    this.src = obj.src;
+    this.alt = obj.alt;
+  }
+  makeNode = function() {
+    const newImg = document.createElement("img");
+    newImg.src = this.src;
+    newImg.alt = this.alt;
+
+    return newImg;
+  }
+}
+
+artwork[0] = new ArtMaker({
+  name: "Cat",
+  src: "../assets/cat.png",
+  alt: "Hey, it's a cat pic"
+});
+
+artwork[1] = new ArtMaker({
+  name: "Dog",
+  src: "../assets/dog.png",
+  alt: "Hey, it's a dog pic"
+});
+
+artwork[2] = new ArtMaker({
+  name: "Rabbit",
+  src: "../assets/rabbit.png",
+  alt: "Hey, it's a rabbit pic"
+});
+
+const picArt = document.querySelectorAll("div.article:nth-child(6) p.date~p");
+let picArtArr = Array.from(picArt);
+picArtArr.forEach( (elem) => {
+  let i = picArtArr.indexOf(elem);
+  picArtArr[i].appendChild(artwork[i].makeNode());
+});
